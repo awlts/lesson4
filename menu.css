@@ -1,0 +1,114 @@
+/* ====== Reset (必要最小限) ====== */
+ul, li { margin: 0; padding: 0; list-style: none; }
+
+/* ====== メニューバー（スライド「背景色と余白」） ====== */
+/* PDFの指定: ul.ddmenu { margin:0; padding-left:15px; background:#cc0000 } */
+ul.ddmenu {
+  margin: 0;
+  padding: 0 0 0 15px;
+  background-color: #cc0000;
+  display: flex;            /* 横並び（inline-blockの代替、等間隔制御しやすい） */
+  gap: 0;
+}
+
+/* ====== メイン項目（スライド「リストを横並びに」） ====== */
+/* PDFの意図: li を横並び & サブメニューの基準位置にする */
+ul.ddmenu > li {
+  width: 125px;             /* スライドと同値（必要に応じて調整可） */
+  position: relative;       /* サブメニューの絶対配置の基準 */
+  flex: 0 0 125px;
+}
+
+/* ====== リンクの見た目（スライド「項目ごとの指定」） ====== */
+/* 背景: #cc0000, 文字: 白, 行高: 40px, 中央寄せ, 下線なし, 太字, 項目全域をクリック可 */
+ul.ddmenu a {
+  background-color: #cc0000;
+  color: #ffffff;
+  line-height: 40px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  display: block;
+  padding: 0 8px;
+  transition: background-color .15s ease, color .15s ease;
+}
+
+/* ====== ホバー時（スライド「サブメニューを開く」） ====== */
+/* メイン項目にホバーで色反転（PDF: 背景 #ffdddd / 文字 #dd0000） */
+ul.ddmenu > li:hover > a,
+ul.ddmenu > li:focus-within > a {
+  background-color: #ffdddd;
+  color: #dd0000;
+}
+
+/* ====== サブメニュー（スライド「サブメニューを非表示に」） ====== */
+/* 初期は非表示、親<li>を基準に絶対配置 */
+ul.ddmenu ul {
+  display: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 40px;     /* メインの高さに合わせる */
+  left: 0;
+  min-width: 100%;
+  z-index: 1000;
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+  border: 1px solid #eee;
+  background: #ffffff;  /* サブの背景は白にすると視認性が高い */
+}
+
+/* 親<li>がホバー/フォーカスでサブメニューを表示（PDF: li:hover ul { display:block }） */
+ul.ddmenu li:hover > ul,
+ul.ddmenu li:focus-within > ul {
+  display: block;
+}
+
+/* ====== サブメニューの各項目 ====== */
+ul.ddmenu ul li a {
+  background: #ffffff;
+  color: #333333;
+  line-height: 36px;
+  text-align: left;
+  padding: 0 12px;
+  border-top: 1px solid #f1f1f1;
+  white-space: nowrap;  /* 折り返し防止 */
+}
+
+/* サブ項目のホバー/フォーカス（PDFに準拠した配色） */
+ul.ddmenu ul li a:hover,
+ul.ddmenu ul li a:focus {
+  background-color: #ffdddd;
+  color: #dd0000;
+}
+
+/* ====== キーボード操作アクセシビリティ補助 ====== */
+ul.ddmenu a:focus {
+  outline: 2px solid #dd0000;
+  outline-offset: 2px;
+}
+
+/* ====== 小さな画面のときの簡易レスポンシブ（任意） ====== */
+@media (max-width: 640px) {
+  ul.ddmenu {
+    flex-wrap: wrap;
+    padding-left: 8px;
+  }
+  ul.ddmenu > li {
+    width: 50%;
+    flex: 1 0 50%;
+  }
+  /* モバイル環境でサブメニューが画面外に出ないように */
+  ul.ddmenu ul {
+    position: static;     /* 下に展開 */
+    border: none;
+    box-shadow: none;
+  }
+  ul.ddmenu li:hover > ul,
+  ul.ddmenu li:focus-within > ul {
+    display: block;
+  }
+  ul.ddmenu ul li a {
+    border-top: none;
+    padding-left: 20px;   /* 階層のインデント */
+  }
+}
